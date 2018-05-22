@@ -1,0 +1,19 @@
+{
+  "name": "dgsapi-lambda",
+  "version": "1.0.0",
+  "description": "Lambda function for publishing SNS notifications from a website form with CAPTCHA verification.",
+  "main": "index.js",
+  "repository": "git@github.com:DynamicGravitySystems/DgSMailer.git",
+  "scripts": {
+    "test": "mocha tests/index.js",
+    "integration": "mocha tests/integration.js"
+  },
+  "author": "Zachery Brady",
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.241.1"
+  },
+  "devDependencies": {
+    "mocha": "^5.1.1"
+  }
+}
