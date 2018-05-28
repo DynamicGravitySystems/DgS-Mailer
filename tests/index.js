@@ -1,10 +1,11 @@
 const assert = require('assert');
-const app = require('../function/index');
-const captcha = require('../function/captcha');
+const app = require('../src/index');
+const captcha = require('../src/captcha');
 
 // See: https://developers.google.com/recaptcha/docs/faq  (Question 2)
 const captcha_dev_secret = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe';
 const topic = process.env.AWS_SNS_TEST;
+const awsid = process.env.AWS_ACC_ID;
 
 
 // Note SNS integration test functions are dependent on valid AWS credentials and an available SNS topic
@@ -19,20 +20,21 @@ describe('index', function () {
         try{
             await app.execute(topic, event, 'invalidsecret');
         } catch (e) {
+            assert.equal(e.name, 'CaptchaError');
             return
         }
         assert.fail("Did not produce expected error");
     });
     it('Should throw an error if the SNS topic parameter is invalid', async function(){
         try {
-            await app.execute('arn:aws:sns:us-west-2:123456789101:fake-topic', event, captcha_dev_secret);
+            await app.execute(`arn:aws:sns:us-west-2:${awsid}:fake-topic`, event, captcha_dev_secret);
         } catch (e) {
+            assert.equal(e.name, 'SNSError');
             return
         }
         assert.fail("Did not produce expected error");
     })
 });
-
 
 describe('captcha', function () {
     describe('#verify()', function() {
@@ -44,6 +46,7 @@ describe('captcha', function () {
             try {
                 await captcha.verify('mytoken', 'invalidsecret');
             } catch (e) {
+                console.log(e);
                 return
             }
             assert.fail("Captcha verify did not fail as expected.");

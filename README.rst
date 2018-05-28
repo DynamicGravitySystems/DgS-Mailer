@@ -11,14 +11,17 @@ Installation
 ------------
 
 To install for local development run:
+
 .. code:: bash
     npm install
 
 Run package unit tests:
+
 .. code:: bash
     npm run test
 
 Run SNS integration tests:
+
 .. code:: bash
     npm run integration
 

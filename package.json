@@ -1,5 +1,5 @@
 {
-  "name": "dgsapi-lambda",
+  "name": "dgs-mailer",
   "version": "1.0.0",
   "description": "Lambda function for publishing SNS notifications from a website form with CAPTCHA verification.",
   "main": "index.js",
@@ -14,6 +14,8 @@
     "aws-sdk": "^2.241.1"
   },
   "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-zip": "^4.1.0",
     "mocha": "^5.1.1"
   }
 }

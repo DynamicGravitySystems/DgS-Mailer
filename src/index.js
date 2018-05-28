@@ -1,9 +1,14 @@
 const captcha = require('./captcha');
 const sns = require('./sns');
 const sns_topic = process.env.AWS_SNS_TOPIC;
+const CAPTCHA_ENABLED = process.env.CAPTCHA_ENABLED || false;
 
 exports.execute = async (topic, body, captcha_secret) => {
-    await captcha.verify(body.captcha, captcha_secret);
+    if(CAPTCHA_ENABLED){
+        await captcha.verify(body.captcha, captcha_secret);
+    } else {
+        console.info("Skipping CAPTCHA Verification");
+    }
 
     let subject = body.subject;
     let message = `Message from: ${body.name}  (${body.from})@${body.organization}\n\n`;
@@ -22,6 +27,8 @@ const headers = {
 };
 
 exports.handler = async (event) => {
+    let source = event['requestContext']['identity']['sourceIp'];
+    console.log(`Received integration request from IP: ${source}`);
     try{
         let body;
         if (event.body !== null && event.body !== undefined) {
@@ -41,10 +48,16 @@ exports.handler = async (event) => {
         }
     } catch (e) {
         console.error("Error encountered: " + e);
+        let res = {
+            result: "failure"
+        };
+        if (e.name === 'CaptchaError'){
+            res.reason = e.message;
+        }
         return {
             statusCode: 500,
             headers: headers,
-            body: JSON.stringify({result: "failure"})
+            body: JSON.stringify(res)
         }
     }
 };

@@ -1,6 +1,6 @@
 const assert = require('assert');
-const app = require('../function/index');
-const sns = require('../function/sns');
+const app = require('../src/index');
+const sns = require('../src/sns');
 const captcha_dev_secret = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe';
 const topic = process.env.AWS_SNS_TEST;
 

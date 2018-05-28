@@ -1,6 +1,5 @@
 const https = require('https');
 const querystring = require('querystring');
-// const endpoint = "https://www.google.com/recaptcha/api/siteverify";
 
 const options = {
     hostname: 'www.google.com',
@@ -23,7 +22,10 @@ exports.verify = function(token, secret) {
             res.on('data', (chunk) => {
                 let content = JSON.parse(chunk);
                 if(content.success === true) return resolve(true);
-                else return reject("Captcha verification failed");
+                else return reject({
+                    name: "CaptchaError",
+                    message: "Captcha Verification Failed"
+                });
             });
             res.on('error', (err) => {
                 return reject(err);
